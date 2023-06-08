@@ -22,5 +22,5 @@ export default async function getAnimeList() {
         });
     });
 
-  return animeL;
+  return animeList;
 }
