@@ -2,7 +2,7 @@ import getFillers from "./helper/getFillers.js";
 import getUserInput from "./helper/getUserInput.js";
 import getAnimeList from "./helper/getAnimeList.js";
 
-const animeList = getAnimeList();
+const animeList = await getAnimeList();
 
 // get user input
 let query = getUserInput();
