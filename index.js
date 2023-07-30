@@ -32,7 +32,11 @@ log(chalk.cyanBright("\nHere are the matches found: \n"));
 matches.forEach((match, index) => log(`${index + 1}: ${match.title}`));
 
 log(); // new line
-let input = Number(getUserInput("Input the number of your desired anime: "));
+let input = Number(getUserInput("Input the NUMBER of your desired anime: "));
+
+while (isNaN(input)) {
+  input = Number(getUserInput("Input the NUMBER of your desired anime: "));
+}
 
 const anime = matches[input - 1];
 const fillers = await getFillers(anime.path);
