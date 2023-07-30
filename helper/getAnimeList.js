@@ -1,4 +1,5 @@
 import axios from "axios";
+import chalk from "chalk";
 import { load } from "cheerio";
 
 import { URL, AXIOS_OPTIONS } from "../constants/constants.js";
@@ -11,23 +12,33 @@ import { URL, AXIOS_OPTIONS } from "../constants/constants.js";
  * show, and `path`, which is a string representing the URL path of the show.
  */
 export default async function getAnimeList() {
-  const showsPage = await axios.get(`${URL}/shows`, AXIOS_OPTIONS);
-  const animeList = [];
+  try {
+    const showsPage = await axios.get(`${URL}/shows`, AXIOS_OPTIONS);
+    const animeList = [];
 
-  const $ = load(showsPage.data);
+    const $ = load(showsPage.data);
 
-  $("#ShowList")
-    .find(".Group")
-    .each((_, el) => {
-      $(el)
-        .find("ul li")
-        .each((_, el) => {
-          const title = $(el).find("a").text().toLowerCase();
-          const path = $(el).find("a").attr("href");
+    $("#ShowList")
+      .find(".Group")
+      .each((_, el) => {
+        $(el)
+          .find("ul li")
+          .each((_, el) => {
+            const title = $(el).find("a").text().toLowerCase();
+            const path = $(el).find("a").attr("href");
 
-          animeList.push({ title, path });
-        });
-    });
+            animeList.push({ title, path });
+          });
+      });
 
-  return animeList;
+    return animeList;
+  } catch (error) {
+    console.log(
+      chalk.redBright(
+        "\nSomething went wrong when fetching the anime list, please try again later."
+      )
+    );
+
+    process.exit();
+  }
 }
