@@ -6,11 +6,16 @@ import getAnimeList from "./helper/getAnimeList.js";
 import checkMatch from "./helper/checkMatch.js";
 import logFillers from "./helper/logFillers.js";
 
-const animeList = await getAnimeList();
 const log = console.log;
+
+let animeList;
 
 // get user input
 let query = getUserInput("Enter anime title to hunt its fillers: ");
+
+// get anime list
+animeList = await getAnimeList();
+
 let matches = animeList.filter((anime) => checkMatch(anime.title, query));
 
 while (matches.length === 0) {
