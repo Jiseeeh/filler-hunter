@@ -3,19 +3,21 @@ import chalk from "chalk";
 import getFillers from "./helper/getFillers.js";
 import getUserInput from "./helper/getUserInput.js";
 import getAnimeList from "./helper/getAnimeList.js";
+import checkMatch from "./helper/checkMatch.js";
+import logFillers from "./helper/logFillers.js";
 
 const animeList = await getAnimeList();
 const log = console.log;
 
 // get user input
 let query = getUserInput("Enter anime title to hunt its fillers: ");
-let matches = animeList.filter(checkMatch);
+let matches = animeList.filter((anime) => checkMatch(anime.title, query));
 
 while (matches.length === 0) {
   log(chalk.redBright("\nNo anime found, please try again.\n"));
 
   query = getUserInput("Enter anime title to hunt its fillers: ");
-  matches = animeList.filter(checkMatch);
+  matches = animeList.filter((anime) => checkMatch(anime.title, query));
 }
 
 if (matches.length === 1) {
@@ -42,17 +44,3 @@ const anime = matches[input - 1];
 const fillers = await getFillers(anime.path);
 
 logFillers(fillers, anime.title);
-
-function checkMatch(anime) {
-  return anime.title.includes(query);
-}
-
-function logFillers(fillers, title) {
-  if (fillers.length >= 1) {
-    log(`\nThe fillers for ${chalk.redBright(anime.title)} are:\n`);
-
-    fillers.forEach((filler) => {
-      log(chalk.redBright(`${filler.title} (Episode: ${filler.episode})\n`));
-    });
-  } else log(`\nThere are no fillers for ${chalk.redBright(title)}`);
-}
