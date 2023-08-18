@@ -1,8 +1,7 @@
 import chalk from "chalk";
-import { input } from "@inquirer/prompts";
+import { input, select } from "@inquirer/prompts";
 
 import getFillers from "./helper/getFillers.js";
-import getUserInput from "./helper/getUserInput.js";
 import getAnimeList from "./helper/getAnimeList.js";
 import checkMatch from "./helper/checkMatch.js";
 import logFillers from "./helper/logFillers.js";
@@ -35,20 +34,19 @@ if (matches.length === 1) {
 
 log(chalk.cyanBright("\nHere are the matches found: \n"));
 
-matches.forEach((match, index) => log(`${index + 1}: ${match.title}`));
+const choices = matches.map((anime) => ({
+  name: anime.title,
+  value: {
+    title: anime.title,
+    path: anime.path,
+  },
+}));
 
-log(); // new line
-let animeNumberInput = Number(
-  await input({ message: "Input the NUMBER of your desired anime: " })
-);
+const chosenAnime = await select({
+  message: "Select an anime",
+  choices,
+});
 
-while (isNaN(animeNumberInput)) {
-  animeNumberInput = Number(
-    await input({ message: "Input the NUMBER of your desired anime: " })
-  );
-}
+const fillers = await getFillers(chosenAnime.path);
 
-const anime = matches[animeNumberInput - 1];
-const fillers = await getFillers(anime.path);
-
-logFillers(fillers, anime.title);
+logFillers(fillers, chosenAnime.title);
