@@ -1,5 +1,7 @@
 # Filler Hunter 🎯
 
+![Demo](demo.gif)
+
 ## Setup
 
 - Clone repo
